@@ -1,11 +1,7 @@
-<template>
-  <div class="home">
-    <router-link to="/battle">
-      <Button>
-        勝負する
-      </Button>
-    </router-link>
-  </div>
+<template lang="pug">
+  div.home
+    router-link(to="/battle")
+      Button 勝負する
 </template>
 
 <script lang="ts">

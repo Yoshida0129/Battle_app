@@ -1,35 +1,21 @@
-<template>
-  <div id="battle-form">
-    <p>敗北者になった回数{{ lose_count }}</p>
-    <section v-if="!is_modal_open && !is_finished">
-      <p>自分のHP:{{ my_hp }}</p>
-      <p>敵のHP:{{ enemy_hp }}</p>
-    </section>
-    <div class="button-container" v-if="!is_modal_open && !is_finished">
-      <button @click="_choice(1)" :disabled="is_loading">
-        <i class="fas fa-hand-paper paper-icon"></i>
-      </button>
-      <button @click="_choice(0)" :disabled="is_loading">
-        <i class="fas fa-hand-scissors scissors-icon"></i>
-      </button>
-      <button @click="_choice(2)" :disabled="is_loading">
-        <i class="fas fa-hand-rock rock-icon"></i>
-      </button>
-    </div>
-    <div class="modal-background" v-else></div>
-    <div v-if="is_modal_open" class="modal-container">
-      <modal :msg="msg" @next="_next"></modal>
-    </div>
-    <div v-else-if="is_finished" class="modal-container">
-      <modal
-        :msg="msg"
-        :is_win="is_win"
-        :is_finished="true"
-        :lose_count="lose_count"
-        @retry="_retry"
-      ></modal>
-    </div>
-  </div>
+<template lang="pug">
+  div.battle-form
+    p 敗北者になった回数{{ lose_count }}
+    section(v-if="!is_modal_open && !is_finished")
+      p 自分のHP:{{ my_hp }} p
+      p 敵のHP:{{ enemy_hp }} p
+    div.button-container(v-if="!is_modal_open && !is_finished")
+      button(@click="_choice(1)", :disabled="is_loading")
+        i.fas.fa-hand-paper.paper-icon
+      button(@click="_choice(0)" :disabled="is_loading")
+        i.fas.fa-hand-scissors.scissors-icon
+      button(@click="_choice(2)" :disabled="is_loading")
+        i.fas.fa-hand-rock.rock-icon
+    div.modal-background(v-else)
+    div.modal-container(v-if="is_modal_open")
+      modal(:msg="msg", @next="_next")
+    div.modal-container(v-else-if="is_finished")
+      modal(:msg="msg", :is_win="is_win" :is_finished="true" :lose_count="lose_count" @retry="_retry")
 </template>
 
 <script lang="ts">

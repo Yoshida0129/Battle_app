@@ -1,22 +1,13 @@
-<template>
-  <div>
-    <article v-if="!is_finished">
-      <p>{{ msg }}</p>
-      <button @click="$emit('next')">
-        次へ
-      </button>
-    </article>
-    <article v-else>
-      <p>{{ msg }}</p>
-      <p>敗北した回数:{{ lose_count }}</p>
-      <button v-if="!is_win" @click="$emit('retry')">
-        もう一度
-      </button>
-      <button v-else @click="$emit('retry', true)">
-        最初から
-      </button>
-    </article>
-  </div>
+<template lang="pug">
+  div
+    article(v-if="!is_finished")
+      p {{ msg }}
+      button(@click="$emit('next')") 次へ
+    article(v-else)
+      p {{ msg }}
+      p 敗北した回数:{{ lose_count }}
+      button(v-if="!is_win", @click="$emit('retry')") もう一度
+      button(v-else, @click="$emit('retry', true)") 最初から
 </template>
 
 <script lang="ts">
