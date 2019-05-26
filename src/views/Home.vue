@@ -1,5 +1,6 @@
 <template lang="pug">
   div.home
+    p さぁ！勝負だ！
     router-link(to="/battle")
       Button 勝負する
 </template>
@@ -12,10 +13,21 @@ export default Vue.extend({
 });
 </script>
 <style lang="postcss" scoped>
-:root {
-  --color: red;
-}
+@import "../assets/index.postcss";
 .home {
-  background-color: var(--color);
+  @mixin container;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & a {
+    display: block;
+    width: 100%;
+    & button {
+      width: 100%;
+    }
+  }
 }
 </style>

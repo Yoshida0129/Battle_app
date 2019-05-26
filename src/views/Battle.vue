@@ -1,21 +1,25 @@
 <template lang="pug">
   div#battle-form
-    p 敗北者になった回数{{ lose_count }}
-    section(v-if="!is_modal_open && !is_finished")
-      p 自分のHP:{{ my_hp }}
-      p 敵のHP:{{ enemy_hp }}
-    div.button-container(v-if="!is_modal_open && !is_finished")
+    section.info-container(v-if="!is_finished")
+      div
+        p 敗北者になった回数:
+          span {{ lose_count }}
+        section(v-if="!is_finished")
+          p 自分のHP:
+            span {{ my_hp }}
+          p 敵のHP:
+            span {{ enemy.hp }}
+      p: i.fas(:class="_enemyChoice")
+    div.button-container(v-if="!is_finished")
       button(@click="_choice(1)", :disabled="is_loading")
         i.fas.fa-hand-paper.paper-icon
       button(@click="_choice(0)" :disabled="is_loading")
         i.fas.fa-hand-scissors.scissors-icon
       button(@click="_choice(2)" :disabled="is_loading")
         i.fas.fa-hand-rock.rock-icon
-    div.modal-background(v-else)
-    div.modal-container(v-if="is_modal_open")
-      modal(:msg="msg", @next="_next")
-    div.modal-container(v-else-if="is_finished")
+    div.modal-container(v-else)
       modal(:msg="msg", :is_win="is_win" :is_finished="true" :lose_count="lose_count" @retry="_retry")
+      div
 </template>
 
 <script lang="ts">
@@ -32,11 +36,13 @@ export default Vue.extend({
   data() {
     return {
       my_hp: 3,
-      enemy_hp: 3,
+      enemy: {
+        hp: 3,
+        choice: 3
+      },
       lose_count: 0,
       is_loading: false,
       sec: 200,
-      is_modal_open: false,
       msg: "",
       is_finished: false,
       is_win: false
@@ -45,6 +51,18 @@ export default Vue.extend({
   components: {
     Modal
   },
+  computed: {
+    _enemy_hp(): number {
+      return this.enemy.hp;
+    },
+    _enemyChoice(): any {
+      return {
+        "fa-hand-rock rock-icon": this.enemy.choice === 0,
+        "fa-hand-paper paper-icon": this.enemy.choice === 1,
+        "fa-hand-scissors scissors-icon": this.enemy.choice === 2
+      };
+    }
+  },
   watch: {
     my_hp: function() {
       if (this.my_hp <= 0) {
@@ -52,19 +70,13 @@ export default Vue.extend({
         this.lose_count++;
         this.is_win = false;
         this.msg = "YOU LOSE";
-      } else {
-        this.is_modal_open = true;
-        this.msg = "自分に1ダメージ";
       }
     },
-    enemy_hp: function() {
-      if (this.enemy_hp <= 0) {
+    _enemy_hp: function() {
+      if (this.enemy.hp <= 0) {
         this.is_finished = true;
         this.is_win = true;
         this.msg = "YOU WIN";
-      } else {
-        this.is_modal_open = true;
-        this.msg = "敵に1ダメージ！";
       }
     }
   },
@@ -74,88 +86,114 @@ export default Vue.extend({
       setTimeout(this._judge, this.sec, user_choice);
     },
     _judge(user_choice: number): void {
-      _judgePoint(user_choice).then((val: number) => {
+      _judgePoint(user_choice).then(({ val, ai_choice }) => {
+        this.enemy.choice = ai_choice;
         if (val === 2) {
+          // lose
           this.my_hp--;
         } else if (val === 1) {
-          this.enemy_hp--;
-        } else {
-          this.msg = "Draw";
-          this.is_modal_open = true;
+          // win
+          this.enemy.hp--;
         }
+        this.is_loading = false;
       });
     },
     _retry(init?: boolean): void {
       this.my_hp = 3;
-      this.enemy_hp = 3;
+      this.enemy.hp = 3;
+      this.enemy.choice = 3;
       this.msg = "";
-      this.is_modal_open = false;
       this.is_finished = false;
-      this.is_modal_open = false;
-      this.is_loading = false;
       if (init) {
         this.lose_count = 0;
       }
-    },
-    _next(): void {
-      this.is_modal_open = false;
-      this.is_finished = false;
-      this.is_loading = false;
-      this.msg = "";
     }
   }
 });
 </script>
 <style lang="postcss" scoped>
+@import "../assets/index.postcss";
+
 #battle-form {
-  width: 50%;
-  height: 50%;
+  width: 500px;
+  height: 80%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+  justify-content: space-between;
 }
-.button-container {
-  width: 80%;
-  height: 30%;
-  margin: 0 auto;
-  & button {
-    width: calc(100% / 3);
-    height: calc(100% / 3);
-    & i {
-      font-size: 20px;
+.info-container {
+  @mixin container;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  & div {
+    width: 350px;
+    text-align: right;
+    padding: 0 50px;
+    & span {
+      font-size: 1.2em;
+      padding: 0 5px;
     }
   }
-  & .paper-icon {
-    color: #aa0000;
-  }
-  & .scissors-icon {
-    color: #00aa00;
-    transform: rotate(90deg) scale(1, -1);
-  }
-  & .rock-icon {
-    color: #0000aa;
+  & > p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100%;
+    font-size: 30px;
+    border-radius: 0 10px 10px 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.3);
+    & i {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
-.modal-background {
-  z-index: 2;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
+.button-container {
+  @mixin container;
+  width: 100%;
+  height: 30%;
+  display: flex;
+  align-items: center;
+  & button {
+    width: calc(100% / 3);
+    height: 100%;
+    & > i {
+      font-size: 30px;
+    }
+  }
+}
+.paper-icon {
+  color: #aa0000;
+}
+.scissors-icon {
+  color: #00aa00;
+  transform: rotate(90deg) scale(1, -1);
+}
+.rock-icon {
+  color: #0000aa;
 }
 .modal-container {
-  width: 50%;
-  height: 50%;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  z-index: 3;
+  @mixin container;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  & div {
+    z-index: -1;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
 </style>

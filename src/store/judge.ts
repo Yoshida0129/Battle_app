@@ -8,6 +8,6 @@ async function _aiChoice(): Promise<number> {
  */
 export async function _judgePoint(user_choice: number) {
   return _aiChoice().then((ai_choice: number) => {
-    return (user_choice - ai_choice + 3) % 3;
+    return { val: (user_choice - ai_choice + 3) % 3, ai_choice: ai_choice };
   });
 }

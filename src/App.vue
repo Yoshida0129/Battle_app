@@ -2,7 +2,7 @@
   router-view
 </template>
 
-<style>
+<style lang="postcss">
 body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -25,5 +25,8 @@ button {
   appearance: none;
   padding: 10px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  &:hover {
+    opacity: 0.5;
+  }
 }
 </style>
