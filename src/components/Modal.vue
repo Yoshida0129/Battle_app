@@ -22,18 +22,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 div {
   width: 50%;
   margin: 0 auto;
-  > article {
+  & > article {
     width: 100%;
     display: flex;
     flex-direction: column;
-    > p {
+    & > p {
       text-align: center;
     }
-    > button {
+    & > button {
       width: 100%;
       border-radius: 10px;
       background-color: #0099ff;

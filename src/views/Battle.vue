@@ -1,9 +1,9 @@
 <template lang="pug">
-  div.battle-form
+  div#battle-form
     p 敗北者になった回数{{ lose_count }}
     section(v-if="!is_modal_open && !is_finished")
-      p 自分のHP:{{ my_hp }} p
-      p 敵のHP:{{ enemy_hp }} p
+      p 自分のHP:{{ my_hp }}
+      p 敵のHP:{{ enemy_hp }}
     div.button-container(v-if="!is_modal_open && !is_finished")
       button(@click="_choice(1)", :disabled="is_loading")
         i.fas.fa-hand-paper.paper-icon
@@ -106,7 +106,7 @@ export default Vue.extend({
   }
 });
 </script>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 #battle-form {
   width: 50%;
   height: 50%;
@@ -122,21 +122,21 @@ export default Vue.extend({
   width: 80%;
   height: 30%;
   margin: 0 auto;
-  > button {
+  & button {
     width: calc(100% / 3);
     height: calc(100% / 3);
-    > i {
+    & i {
       font-size: 20px;
     }
   }
-  .paper-icon {
+  & .paper-icon {
     color: #aa0000;
   }
-  .scissors-icon {
+  & .scissors-icon {
     color: #00aa00;
     transform: rotate(90deg) scale(1, -1);
   }
-  .rock-icon {
+  & .rock-icon {
     color: #0000aa;
   }
 }

@@ -11,3 +11,11 @@ export default Vue.extend({
   name: "home"
 });
 </script>
+<style lang="postcss" scoped>
+:root {
+  --color: red;
+}
+.home {
+  background-color: var(--color);
+}
+</style>
