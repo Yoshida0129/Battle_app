@@ -120,7 +120,7 @@ export default Vue.extend({
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 .info-container {
   @mixin container;
@@ -181,8 +181,8 @@ export default Vue.extend({
 }
 .modal-container {
   @mixin container;
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;

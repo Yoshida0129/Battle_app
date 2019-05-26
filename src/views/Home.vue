@@ -1,8 +1,9 @@
 <template lang="pug">
   div.home
-    p さぁ！勝負だ！
-    router-link(to="/battle")
-      Button 勝負する
+    p "貴様"は所詮...先の時代の"敗北者"じゃけェ...!!!
+    div
+      router-link(to="/battle")
+        Button 取り消せよ、今の言葉...!!
 </template>
 
 <script lang="ts">
@@ -16,17 +17,19 @@ export default Vue.extend({
 @import "../assets/index.postcss";
 .home {
   @mixin container;
-  width: 200px;
-  height: 200px;
+  width: 500px;
+  height: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  & a {
-    display: block;
-    width: 100%;
+  & div {
+    width: 80%;
+    margin: 0 auto;
     & button {
       width: 100%;
+      font-size: 15px;
+      @mixin btn;
     }
   }
 }
